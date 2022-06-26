@@ -1,0 +1,76 @@
+body {
+    background-image: url("images/bg1.jpeg");
+    background-size: cover;
+    color: rgb(3, 3, 3)
+}
+
+.gallery {
+    width: 80vw;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+}
+
+.title {
+    text-align: center;
+    color: rgb(45, 201, 53);
+    background-color: rgba(0, 0, 0, 0.404);
+    width: 600px;
+    border-radius: 5px;
+    margin: 10px auto;
+    padding: 10px;
+}
+
+.btn-icon {
+    background-color: rgb(45, 201, 53);
+    border-radius: 100%;
+    width: 50px;
+    height: 43px;
+    margin: 0 20px;
+}
+
+.card {
+    /* background-color: rgb(245, 245, 241); */
+    background-color: rgb(245, 245, 241);
+    max-width: 70vw;
+    height: 73vh;
+    border: 5px solid rgb(45, 201, 53);
+    border-radius: 30px;
+    padding: 0px 50px 90px 50px;
+}
+
+.card__image {
+    max-width: 90%;
+    border-radius: 5px;
+}
+
+.card__title {
+    font-weight: bold;
+}
+
+.card__top {
+    display: flex;
+    height: 50vh;
+}
+
+.inf {
+    align-self: center;
+    width: 45%;
+}
+
+.pic {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box
+}
+
+.hide {
+    visibility: hidden;
+}
+
+.rate {
+    width: 15px;
+    font-size: 15px;
+}
