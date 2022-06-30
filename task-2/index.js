@@ -23,44 +23,44 @@ function getWeather(city, lang, units) {
         .then((weather) => {
             let description = weather.weather[0].description;
             let descriptionUpperCase = description[0].toUpperCase() + description.slice(1);
-            let deg = weather.wind.deg;
+            let deg = +weather.wind.deg;
             function getWind(deg) {
-                if (345 < deg <= 15) {
+                if (deg <= 15 || deg > 345) {
                     wind = "Западный";
                     windEn = "West";
                     return;
                 }
-                if (15 < deg <= 75) {
+                if (deg > 15 && deg <= 75) {
                     wind = "Юго-Западный";
                     windEn = "Southwest";
                     return;
                 }
-                if (75 < deg <= 105) {
+                if (deg > 75 && deg <= 105) {
                     wind = "Южный";
                     windEn = "South";
                     return;
                 }
-                if (105 < deg <= 165) {
+                if (deg > 105 && deg <= 165) {
                     wind = "Юго-Восточный";
                     windEn = "Southeast";
                     return;
                 }
-                if (165 < deg <= 195) {
+                if (deg > 165 && deg <= 195) {
                     wind = "Восточный";
                     windEn = "East";
                     return;
                 }
-                if (195 < deg <= 255) {
+                if (deg > 195 && deg <= 255) {
                     wind = "Северо-Восточный";
                     windEn = "Northeast";
                     return;
                 }
-                if (255 < deg <= 285) {
+                if (deg > 255 && deg <= 285) {
                     wind = "Северный";
                     windEn = "North";
                     return;
                 }
-                if (285 < deg <= 345) {
+                if (deg > 285 && deg <= 345) {
                     wind = "Северo-Западный";
                     windEn = "Northwest";
                     return;
@@ -75,7 +75,12 @@ function getWeather(city, lang, units) {
             document.querySelector(".wind").innerText = windTitle + (lang == "en" ? windEn : wind) + speedText + Math.round(weather.wind.speed) + speedMetric;
             document.querySelector(".high-low").innerText = maxText + Math.round(weather.main.temp_max) + "°" + " / " + minText + Math.round(weather.main.temp_min) + "°";
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+            console.log(err);
+            if (err) {
+                document.querySelector("#errorApi").innerHTML = "Город не найден";
+            }
+        });
 }
 
 function chooseCity() {
@@ -122,6 +127,9 @@ document.querySelector("#lang").addEventListener("change", () => {
             `;
             if (document.querySelector("#error").innerHTML) {
                 document.querySelector("#error").innerHTML = errorTextEn;
+            }
+            if (document.querySelector("#errorApi").innerHTML) {
+                document.querySelector("#errorApi").innerHTML = "City not found";
             }
             break;
         default:
