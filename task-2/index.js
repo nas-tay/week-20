@@ -13,10 +13,6 @@ let windEn = "";
 let errorText = "Город не указан";
 let errorTextEn = "City not specified";
 
-document.addEventListener("DOMContentLoaded", function () {
-    getWeather(city, lang, units);
-});
-
 function getWeather(city, lang, units) {
     fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&lang=${lang}&appid=35918fd762dc1291fb2f2f84ff61dbb7&units=${units}`)
         .then((response) => response.json())
@@ -24,6 +20,7 @@ function getWeather(city, lang, units) {
             let description = weather.weather[0].description;
             let descriptionUpperCase = description[0].toUpperCase() + description.slice(1);
             let deg = +weather.wind.deg;
+
             function getWind(deg) {
                 if (deg <= 15 || deg > 345) {
                     wind = "Западный";
@@ -93,44 +90,68 @@ function chooseCity() {
     getWeather(city, lang, units);
 }
 
-document.querySelector("#lang").addEventListener("change", () => {
-    switch (document.querySelector("#lang").value) {
-        case "ru":
-            lang = "ru";
-            feelsLike = "Ощущается как: ";
-            humid = "Влажность: ";
-            windTitle = "Ветер: ";
-            speedText = ", со скоростью ";
-            speedMetric = "м/с";
-            maxText = "Макс. t: ";
-            minText = "Мин. t: ";
-            document.querySelector(".citySelect").innerHTML = `
-            <label for="city">Введите название города:
-                <input type="text" id="city" placeholder="город"></label>
-            `;
-            if (document.querySelector("#error").innerHTML) {
-                document.querySelector("#error").innerHTML = errorText;
-            }
-            break;
-        case "en":
-            lang = "en";
-            feelsLike = "Feels like: ";
-            humid = "Humidity: ";
-            windTitle = "Wind: ";
-            speedText = ", at a speed of ";
-            speedMetric = " m/s";
-            maxText = "H.: ";
-            minText = "L.: ";
-            document.querySelector(".citySelect").innerHTML = `
+function setEnglish() {
+    document.querySelector("#lang").value = "en";
+    localStorage.setItem("lang", "en");
+    lang = localStorage.getItem("lang");
+    feelsLike = "Feels like: ";
+    humid = "Humidity: ";
+    windTitle = "Wind: ";
+    speedText = ", at a speed of ";
+    speedMetric = " m/s";
+    maxText = "H: ";
+    minText = "L: ";
+    document.querySelector(".citySelect").innerHTML = `
             <label for="city">Enter city name:
                 <input type="text" id="city" placeholder="city"></label>
             `;
-            if (document.querySelector("#error").innerHTML) {
-                document.querySelector("#error").innerHTML = errorTextEn;
-            }
-            if (document.querySelector("#errorApi").innerHTML) {
-                document.querySelector("#errorApi").innerHTML = "City not found";
-            }
+    if (document.querySelector("#error").innerHTML) {
+        document.querySelector("#error").innerHTML = errorTextEn;
+    }
+    // if (document.querySelector("#errorApi").innerHTML) {
+    //     document.querySelector("#errorApi").innerHTML = "City not found";
+    // }
+}
+
+function setRussian() {
+    document.querySelector("#lang").value = "ru";
+    localStorage.setItem("lang", "ru");
+    lang = localStorage.getItem("lang");
+    feelsLike = "Ощущается как: ";
+    humid = "Влажность: ";
+    windTitle = "Ветер: ";
+    speedText = ", со скоростью ";
+    speedMetric = "м/с";
+    maxText = "Макс. t: ";
+    minText = "Мин. t: ";
+    document.querySelector(".citySelect").innerHTML = `
+            <label for="city">Введите название города:
+                <input type="text" id="city" placeholder="город"></label>
+            `;
+    if (document.querySelector("#error").innerHTML) {
+        document.querySelector("#error").innerHTML = errorText;
+    }
+}
+
+function setCelcium() {
+    document.querySelector("#units").value = "c";
+    localStorage.setItem("units", "metric");
+    units = localStorage.getItem("units");
+}
+
+function setFahrenheit() {
+    document.querySelector("#units").value = "f";
+    localStorage.setItem("units", "imperial");
+    units = localStorage.getItem("units");
+}
+
+document.querySelector("#lang").addEventListener("change", () => {
+    switch (document.querySelector("#lang").value) {
+        case "ru":
+            setRussian();
+            break;
+        case "en":
+            setEnglish();
             break;
         default:
             lang = "ru";
@@ -142,14 +163,30 @@ document.querySelector("#lang").addEventListener("change", () => {
 document.querySelector("#units").addEventListener("change", () => {
     switch (document.querySelector("#units").value) {
         case "c":
-            units = "metric";
+            setCelcium();
             break;
         case "f":
-            units = "imperial";
+            setFahrenheit();
             break;
         default:
             units = "metric";
             break;
+    }
+    getWeather(city, lang, units);
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    if (localStorage.getItem("lang") == "en") {
+        setEnglish();
+    }
+    if (localStorage.getItem("lang") == "ru") {
+        setRussian();
+    }
+    if (localStorage.getItem("units") == "imperial") {
+        setFahrenheit();
+    }
+    if (localStorage.getItem("units") == "metric") {
+        setCelcium();
     }
     getWeather(city, lang, units);
 });
